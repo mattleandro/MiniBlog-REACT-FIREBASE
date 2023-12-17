@@ -1,5 +1,3 @@
-import { db } from "../firebase/config";
-
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -52,8 +50,6 @@ export const useAuthentication = () => {
         systemErrorMessage = "A senha precisa conter pelo menos 6 caracteres.";
       } else if (error.message.includes("email-already")) {
         systemErrorMessage = "E-mail já cadastrado.";
-      } else if (error.message.includes("invalid-email")) {
-        systemErrorMessage = "Digite um e-mail válido!";
       } else {
         systemErrorMessage = "Ocorreu um erro, por favor tenta mais tarde.";
       }
@@ -85,11 +81,10 @@ export const useAuthentication = () => {
 
       let systemErrorMessage;
 
-      if (error.message.includes("invalid-credential")) {
-        systemErrorMessage = "Usuário ou senha inválidos.";
-      } else if (error.message.includes("too-many-requests")) {
-        systemErrorMessage =
-          "O acesso à esta conta foi temporariamente desativado devido a varias tentativas falhas de login. Você pode restaurar o login imediatamente resetando sua senha ou você pode tentar novamente mais tarde.";
+      if (error.message.includes("user-not-found")) {
+        systemErrorMessage = "Usuário não encontrado.";
+      } else if (error.message.includes("wrong-password")) {
+        systemErrorMessage = "Senha incorreta.";
       } else {
         systemErrorMessage = "Ocorreu um erro, por favor tenta mais tarde.";
       }

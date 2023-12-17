@@ -2,7 +2,7 @@
 import styles from "./Home.module.css";
 
 // hooks
-import { useFetchDocument } from "../../hooks/useFetchDocument";
+import { useFetchDocuments } from "../../hooks/useFetchDocuments";
 import { useNavigate, Link } from "react-router-dom";
 
 // react
@@ -12,7 +12,7 @@ import { useState } from "react";
 import PostDetail from "../../components/PostDetail";
 
 const Home = () => {
-  const { documents: posts, loading } = useFetchDocument("posts");
+  const { documents: posts, loading } = useFetchDocuments("posts");
 
   const navigate = useNavigate();
 
@@ -39,18 +39,16 @@ const Home = () => {
         />
         <button className="btn btn-dark">Pesquisar</button>
       </form>
-      <div className="post-list">
-        {loading && <p>Carregando...</p>}
-        {posts && posts.length === 0 && (
-          <div className={styles.noposts}>
-            <p>Não foram encontrados posts</p>
-            <Link to="/posts/create" className="btn">
-              Criar primeiro post
-            </Link>
-          </div>
-        )}
-        {posts && posts.map((post) => <PostDetail key={post.id} post={post} />)}
-      </div>
+      <div className="post-list">{loading && <p>Carregando...</p>}</div>
+      {posts && posts.map((post) => <h3>{post.title}</h3>)}
+      {posts && posts.length === 0 && (
+        <div className={styles.noposts}>
+          <p>Não foram encontrados posts</p>
+          <Link to="posts/create" className="btn">
+            Criar primeiro Post
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

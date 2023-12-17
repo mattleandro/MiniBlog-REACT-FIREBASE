@@ -1,7 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
-
 import { db } from "../firebase/config";
-
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 const initialState = {
@@ -25,37 +23,32 @@ const insertReducer = (state, action) => {
 export const useInsertDocument = (docCollection) => {
   const [response, dispatch] = useReducer(insertReducer, initialState);
 
-  //deal with memory leak
+  // deal with memory leak
   const [cancelled, setCancelled] = useState(false);
 
-  const checkCancelledBeforeDispatch = (action) => {
+  const checkCancelBeforeDispatch = (action) => {
     if (!cancelled) {
       dispatch(action);
     }
   };
 
   const insertDocument = async (document) => {
-    checkCancelledBeforeDispatch({
-      type: "LOADING",
-      payload: insertDocument,
-    });
+    checkCancelBeforeDispatch({ type: "LOADING" });
+
     try {
       const newDocument = { ...document, createdAt: Timestamp.now() };
 
-      //procura no banco de dados a coleção que foi passado como argumento da funçõa
-      const insertDocument = await addDoc(
+      const insertedDocument = await addDoc(
         collection(db, docCollection),
         newDocument
       );
-      checkCancelledBeforeDispatch({
-        type: "INSERT",
-        payload: insertDocument,
+
+      checkCancelBeforeDispatch({
+        type: "INSERTED_DOC",
+        payload: insertedDocument,
       });
     } catch (error) {
-      checkCancelledBeforeDispatch({
-        type: "ERROR",
-        payload: error.message,
-      });
+      checkCancelBeforeDispatch({ type: "ERROR", payload: error.message });
     }
   };
 

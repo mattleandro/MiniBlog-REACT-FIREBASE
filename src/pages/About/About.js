@@ -1,4 +1,3 @@
-//CSS
 import styles from "./About.module.css";
 
 import { Link } from "react-router-dom";
@@ -10,11 +9,11 @@ const About = () => {
         Sobre o Mini <span>Blog</span>
       </h2>
       <p>
-        Esse projeto consistem em um blog feito com React no front-end e
-        Firebase no back-end
+        Este projeto consiste em um blog feito com React no front-end e Firebase
+        no back-end.
       </p>
-      <Link className="btn" to="/posts/create">
-        Ciar Post
+      <Link to="/posts/create" className="btn">
+        Criar post
       </Link>
     </div>
   );
