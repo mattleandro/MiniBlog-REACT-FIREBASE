@@ -1,16 +1,33 @@
-//hooks
+import styles from "./Search.module.css";
+
+// hooks
 import { useFetchDocument } from "../../hooks/useFetchDocument";
 import { useQuery } from "../../hooks/useQuery";
 
-import styles from "./Search.module.css";
+// components
+import PostDetail from "../../components/PostDetail";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   const query = useQuery();
-  const search = query.get("q"); // metodo get vem da new URLSearchParams
+  const search = query.get("q");
+
+  const { documents: posts } = useFetchDocument("posts", search);
+
   return (
-    <div>
-      <h2>Search</h2>
-      <p>{search}</p>
+    <div className={styles.search_container}>
+      <h1>Resultados encontrados para: {search}</h1>
+      <div className="post-list">
+        {posts && posts.length === 0 && (
+          <>
+            <p>Não foram encontrados posts a partir da sua busca...</p>
+            <Link to="/" className="btn btn-dark">
+              Voltar
+            </Link>
+          </>
+        )}
+        {posts && posts.map((post) => <PostDetail key={post.id} post={post} />)}
+      </div>
     </div>
   );
 };
